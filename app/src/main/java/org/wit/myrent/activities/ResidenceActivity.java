@@ -1,17 +1,27 @@
-package org.wit.myrent;
+package org.wit.myrent.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
-public class MyRentActivity extends AppCompatActivity implements TextWatcher
+import org.wit.myrent.R;
+import org.wit.myrent.models.Residence;
+
+public class ResidenceActivity extends AppCompatActivity implements TextWatcher, CompoundButton.OnCheckedChangeListener
 {
   private EditText geolocation;
   private Residence residence;
+
+  private CheckBox rented;
+  private Button dateButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -24,6 +34,12 @@ public class MyRentActivity extends AppCompatActivity implements TextWatcher
 
     // Register a TextWatcher in the EditText geolocation object
     geolocation.addTextChangedListener(this);
+
+    dateButton  = (Button)   findViewById(R.id.registration_date);
+    rented      = (CheckBox) findViewById(R.id.isrented);
+
+    dateButton .setEnabled(false);
+
   }
 
   @Override
@@ -67,5 +83,12 @@ public class MyRentActivity extends AppCompatActivity implements TextWatcher
   public void afterTextChanged(Editable editable)
   {
     residence.setGeolocation(editable.toString());
+  }
+
+  @Override
+  public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked)
+  {
+    Log.i(this.getClass().getSimpleName(), "rented Checked");
+    residence.rented = isChecked;
   }
 }

@@ -25,6 +25,5 @@ Thumbs.db
 # Android Studio
 # https://www.jetbrains.com/idea/help/project.html
 *.iml
-.idea/workspace.xml
 .gradle
 build/

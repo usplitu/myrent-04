@@ -13,7 +13,11 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.wit.myrent.R;
+import org.wit.myrent.app.MyRentApp;
+import org.wit.myrent.models.Portfolio;
 import org.wit.myrent.models.Residence;
+
+import java.util.UUID;
 
 public class ResidenceActivity extends AppCompatActivity implements TextWatcher, CompoundButton.OnCheckedChangeListener
 {
@@ -22,6 +26,8 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
 
   private CheckBox rented;
   private Button dateButton;
+
+  private Portfolio portfolio;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -40,6 +46,23 @@ public class ResidenceActivity extends AppCompatActivity implements TextWatcher,
 
     dateButton .setEnabled(false);
 
+    MyRentApp app = (MyRentApp) getApplication();
+    portfolio = app.portfolio;
+
+    UUID resId = (UUID) getIntent().getExtras().getSerializable("RESIDENCE_ID");
+    residence = portfolio.getResidence(resId);
+    if (residence != null)
+    {
+      updateControls(residence);
+    }
+
+  }
+
+  public void updateControls(Residence residence)
+  {
+    geolocation.setText(residence.geolocation);
+    rented.setChecked(residence.rented);
+    dateButton.setText(residence.getDateString());
   }
 
   @Override

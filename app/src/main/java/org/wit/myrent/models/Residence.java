@@ -15,7 +15,8 @@ public class Residence
   public Residence()
   {
     id = UUID.randomUUID();
-    this.date = new Date();
+    date = new Date();
+    geolocation = "52.253456,-7.187162";
   }
 
   public void setGeolocation(String geolocation)

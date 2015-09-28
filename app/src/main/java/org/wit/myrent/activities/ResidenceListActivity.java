@@ -23,6 +23,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static org.wit.android.helpers.IntentHelper.startActivityWithData;
+import static org.wit.android.helpers.IntentHelper.startActivityWithDataForResult;
+
 public class ResidenceListActivity extends Activity  implements AdapterView.OnItemClickListener
 {
   private ListView listView;
@@ -58,27 +61,22 @@ public class ResidenceListActivity extends Activity  implements AdapterView.OnIt
   @Override
   public boolean onOptionsItemSelected(MenuItem item)
   {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings)
+    switch (item.getItemId())
     {
-      return true;
-    }
+      case R.id.menu_item_new_residence: Residence residence = new Residence();
+        portfolio.addResidence(residence);
+        startActivityWithDataForResult(this, ResidenceActivity.class, "RESIDENCE_ID", residence.id, 0);
+        return true;
 
-    return super.onOptionsItemSelected(item);
+      default: return super.onOptionsItemSelected(item);
+    }
   }
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id)
   {
     Residence residence = adapter.getItem(position);
-    Intent intent = new Intent(this, ResidenceActivity.class);
-    intent.putExtra("RESIDENCE_ID", residence.id);
-    startActivity(intent);
+    startActivityWithData(this, ResidenceActivity.class, "RESIDENCE_ID", residence.id);
   }
 
   @Override

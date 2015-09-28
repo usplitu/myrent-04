@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import org.wit.myrent.R;
@@ -19,7 +20,21 @@ import org.wit.myrent.models.Residence;
 
 import java.util.UUID;
 
-public class ResidenceActivity extends Activity implements TextWatcher, CompoundButton.OnCheckedChangeListener
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import android.app.DatePickerDialog;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RadioGroup;
+
+public class ResidenceActivity extends Activity implements
+    TextWatcher,
+    CompoundButton.OnCheckedChangeListener,
+    View.OnClickListener,
+    DatePickerDialog.OnDateSetListener
 {
   private EditText geolocation;
   private Residence residence;
@@ -41,10 +56,8 @@ public class ResidenceActivity extends Activity implements TextWatcher, Compound
     // Register a TextWatcher in the EditText geolocation object
     geolocation.addTextChangedListener(this);
 
-    dateButton  = (Button)   findViewById(R.id.registration_date);
-    rented      = (CheckBox) findViewById(R.id.isrented);
-
-    dateButton .setEnabled(false);
+    dateButton = (Button) findViewById(R.id.registration_date);
+    rented = (CheckBox) findViewById(R.id.isrented);
 
     MyRentApp app = (MyRentApp) getApplication();
     portfolio = app.portfolio;
@@ -55,7 +68,6 @@ public class ResidenceActivity extends Activity implements TextWatcher, Compound
     {
       updateControls(residence);
     }
-
   }
 
   public void updateControls(Residence residence)
@@ -63,6 +75,7 @@ public class ResidenceActivity extends Activity implements TextWatcher, Compound
     geolocation.setText(residence.geolocation);
     rented.setChecked(residence.rented);
     dateButton.setText(residence.getDateString());
+    dateButton.setOnClickListener(this);
   }
 
   @Override
@@ -113,5 +126,26 @@ public class ResidenceActivity extends Activity implements TextWatcher, Compound
   {
     Log.i(this.getClass().getSimpleName(), "rented Checked");
     residence.rented = isChecked;
+  }
+
+  @Override
+  public void onClick(View v)
+  {
+    switch (v.getId())
+    {
+      case R.id.registration_date:
+        Calendar c = Calendar.getInstance();
+        DatePickerDialog dpd = new DatePickerDialog(this, this, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        dpd.show();
+        break;
+    }
+  }
+
+  @Override
+  public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+  {
+    Date date = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+    residence.date = date;
+    dateButton.setText(residence.getDateString());
   }
 }

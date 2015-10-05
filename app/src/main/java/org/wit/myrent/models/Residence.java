@@ -49,9 +49,9 @@ public class Residence
   {
     return "Registered: " + DateFormat.getDateTimeInstance().format(date);
   }
-}
 
   public void setGeolocation(String geolocation)
   {
     this.geolocation = geolocation;
   }
+}

@@ -24,7 +24,7 @@ public class Residence
   {
     this.id          = UUID.randomUUID();
     this.date        = new Date();
-    this.geolocation = "";
+    this.geolocation = "52.253456,-7.187162";
   }
 
   public Residence(JSONObject json) throws JSONException

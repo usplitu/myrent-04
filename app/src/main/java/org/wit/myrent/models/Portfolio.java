@@ -1,5 +1,6 @@
 package org.wit.myrent.models;
 
+import static org.wit.android.helpers.LogHelpers.info;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -9,11 +10,35 @@ import android.util.Log;
 public class Portfolio
 {
   public  ArrayList<Residence>  residences;
+  private PortfolioSerializer   serializer;
 
-  public Portfolio()
+  public Portfolio(PortfolioSerializer serializer)
   {
-    residences = new ArrayList<Residence>();
-    this.generateTestData();
+    this.serializer = serializer;
+    try
+    {
+      residences = serializer.loadResidences();
+    }
+    catch (Exception e)
+    {
+      info(this, "Error loading residences: " + e.getMessage());
+      residences = new ArrayList<Residence>();
+    }
+  }
+
+  public boolean saveResidences()
+  {
+    try
+    {
+      serializer.saveResidences(residences);
+      info(this, "Residences saved to file");
+      return true;
+    }
+    catch (Exception e)
+    {
+      info(this, "Error saving residences: " + e.getMessage());
+      return false;
+    }
   }
 
   public void addResidence(Residence residence)
@@ -32,24 +57,12 @@ public class Portfolio
         return res;
       }
     }
+    info(this, "failed to find residence. returning first element array to avoid crash");
     return null;
   }
 
-  private void generateTestData()
+  public void deleteResidence(Residence c)
   {
-    for(int i = 0; i < 100; i += 1)
-    {
-      Residence r = new Residence();
-      r.geolocation = (52.253456 + i) % 90 +  ", " + (-7.187162 - i) % 180 + "";
-      if(i%2 == 0)
-      {
-        r.rented = true;
-      }
-      else
-      {
-        r.rented = false;
-      }
-      residences.add(r);
-    }
+    residences.remove(c);
   }
 }

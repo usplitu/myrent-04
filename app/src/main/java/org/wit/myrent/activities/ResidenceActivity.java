@@ -27,8 +27,6 @@ import java.util.GregorianCalendar;
 
 import android.app.DatePickerDialog;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.RadioGroup;
 
 public class ResidenceActivity extends Activity implements
     TextWatcher,
@@ -48,7 +46,7 @@ public class ResidenceActivity extends Activity implements
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_myrent);
+    setContentView(R.layout.activity_residence);
 
     geolocation = (EditText) findViewById(R.id.geolocation);
     residence = new Residence();
@@ -147,5 +145,11 @@ public class ResidenceActivity extends Activity implements
     Date date = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
     residence.date = date;
     dateButton.setText(residence.getDateString());
+  }
+
+  public void onPause()
+  {
+    super.onPause();
+    portfolio.saveResidences();
   }
 }
